@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	<!-- resource 引入类路径下 ；url引入网络路径或者磁盘路径下 -->
+	<properties resource="dbconfig.properties"></properties>
+	 <!-- 设置驼峰式命名 -->
+	<settings>
+	    <!-- 驼峰式命名 -->
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<!-- 输出日志 sql-->
+		<setting name="logImpl" value="STDOUT_LOGGING" />
+		<!-- 二级缓存 -->
+		<setting name="cacheEnabled" value="true" />
+	</settings>
+	<!-- 别名 ,为需要使用的类取别名-->
+	<typeAliases>
+		<package name="org.yyt.mybatisex.bean" />
+	</typeAliases>
+	
+	<plugins>
+	    <plugin interceptor="org.yyt.mybatisex.plugins.myTestplugins">
+	        <property name="name" value="myfirst"/>
+	    </plugin>
+	</plugins>
+	<!-- 配置环境 -->
+	<environments default="development">
+		<environment id="test">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driverClass}" />
+				<property name="url" value="${jdbc.jdbcUrl}" />
+				<property name="username" value="${jdbc.user}" />
+				<property name="password" value="${jdbc.password}" />
+			</dataSource>
+		</environment>
+		<environment id="development">
+			<!--事物管理器别名 JDBC()|MANAGED()-->
+			<transactionManager type="JDBC" />
+			<!-- dataSource数据源 type:POOLED|UNPOOLED|JNDI 
+			自定义（c3p0等链接池）:实现DataSourcefactory,type=自定义数据源的全类名
+			-->
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driverClass}" />
+				<property name="url" value="${jdbc.jdbcUrl}" />
+				<property name="username" value="${jdbc.user}" />
+				<property name="password" value="${jdbc.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<!-- 配置支持的数据库
+	     type="DB_VENDOR"数据库厂商供应商
+	 -->
+	<databaseIdProvider type="DB_VENDOR">
+	<!-- 为数据库起别名 -->
+	    <property name="MySQL" value="mysql"/>
+	</databaseIdProvider>
+	<mappers>
+	    <!-- 批量注册
+	    1.需要将xml映射文件和接口放在同一包下且名字相同
+		2.使用注解的方式 -->
+		<package name="org.yyt.mybatisex.dao"/>
+		
+		
+		<!--  
+		url引用磁盘或者网络路径的xml
+		<mapper url=""/>
+		resource引用类路径下的文件
+		<mapper resource="org/yyt/mybatisex/dao/***.xml" /> -->
+		<!-- 
+		1.需要将xml映射文件和接口放在同一包下且名字相同
+		2.使用注解的方式
+		<mapper class="org.yyt.mybatisex.dao.***"/> -->
+	</mappers>
+</configuration>

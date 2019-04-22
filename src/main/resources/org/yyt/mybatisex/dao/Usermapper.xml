@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper  namespace="org.yyt.mybatisex.dao.Usermapper">
+<!-- 引用缓存:namespace指定和某一个名称空间一样 
+<cache-ref namespace=""/>
+-->
+<cache eviction="FIFO" readOnly="false" size="1024" flushInterval="60000"></cache>
+
+<!-- databaseId="mysql" 在什么数据库时使用,useCache='false'关闭二级缓存，flushCache="true"增删改后清空一、二级缓存 -->
+  <select id="selectByPrimaryKey" resultType="user" databaseId="mysql" useCache="true" flushCache="true">
+    select * from user where id = #{id}
+  </select>
+  <!--  useGeneratedKeys="true":开启自增; keyProperty="":获取自增主键设置到bean的某个属性-->
+  <insert id="insert">
+    insert into user(name,age,sex)
+    values(#{name},#{age},#{sex})
+  </insert>
+  
+  <!-- 注：参数为collection时key为collection，list为list,数组为arry -->
+  <select id="selectuserlist" resultType="user">
+      select * from user  limit #{param1},#{param2};
+  </select>
+  
+  <select id="selectTestplugins" resultType="user">
+      select * from user;
+  </select>
+  <!-- mybatis调用存储过程
+      接口 public void procedure();
+      statementType=CALLABLE:在select标签中设置属性
+   例子:
+   <select id="procedure" statementType="CALLABLE">
+       {call hello_test(
+       #{param1,mode=IN,jdbcType=INTEGER},
+        #{param1,mode=OUT,jdbcType=VARCHAR,javaType=ResultSet,resultMap=}
+       )
+       }
+       
+   </select>
+   -->
+  
+</mapper>
